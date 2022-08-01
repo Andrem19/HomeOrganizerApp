@@ -1,5 +1,8 @@
-﻿using System;
+﻿using HomeOrganizerApp.Models.DTOs;
+using HomeOrganizerApp.Services;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +15,15 @@ namespace HomeOrganizerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AdsPage : ContentPage
     {
+        public ObservableCollection<GroupDto> GroupCollection;
         public AdsPage()
         {
             InitializeComponent();
+            GroupCollection = new ObservableCollection<GroupDto>();
             setUpAvatar();
+            LoadMyGroups();
         }
+
         public void setUpAvatar()
         {
             AvatarImg.Source = "touchface.png";
@@ -28,8 +35,14 @@ namespace HomeOrganizerApp.Pages
             }
         }
 
-        public void LoadMyGroups()
+        public async void LoadMyGroups()
         {
+            var groups = await ApiService.GetMyGroups();
+            foreach (var group in groups)
+            {
+                GroupCollection.Add(group);
+            }
+            CvGroups.ItemsSource = GroupCollection;
 
         }
 

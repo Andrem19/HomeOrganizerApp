@@ -1,77 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
              x:Class="HomeOrganizerApp.Pages.AdsPage"
-             xmlns:local="clr-namespace:HomeOrganizerApp.Pages">
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <Grid>
-            <CollectionView x:Name="CvAds"
-                            SelectionMode="Single">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="2" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.Header>
 
-
-                    <StackLayout>
-                        <Label Margin="15,170,15,0"
-                               Text="My Groups"
-                               TextColor="Black"
-                               FontSize="Medium" />
-                        <CollectionView  x:Name="CvGroups"
-                                         HeightRequest="130"
-                                         SelectionMode="Single"
-                                         SelectionChanged="CvGroups_SelectionChanged"
-                                         >
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout Orientation="Horizontal" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Frame Padding="0"
-                                               BackgroundColor="Transparent"
-                                               Margin="15,0,15,0"
-                                               HasShadow="True">
-                                            <StackLayout Orientation="Vertical"
-                                                         >
-                                                <Frame Padding="0"
-                                                       CornerRadius="100"
-                                                       IsClippedToBounds="True"
-                                                       HeightRequest="90"
-                                                       WidthRequest="90"
-                                                       HorizontalOptions="Center">
-                                                    <Image Aspect="AspectFill"
-                                                           HorizontalOptions="FillAndExpand"
-                                                           VerticalOptions="FillAndExpand"
-                                                           Source="{Binding PictureUrl}"/>
-                                                </Frame>
-                                                <Label TextColor="#3F4946"
-                                                       HorizontalTextAlignment="Center"
-                                                       FontSize="Medium"
-                                                       Text="{Binding GroupName}"/>
-                                            </StackLayout>
-                                        </Frame>
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                        <Label Margin="15,15,15,0"
-                               Text=""
-                               TextColor="Black"
-                               FontSize="Medium" />
-                    </StackLayout>
-                </CollectionView.Header>
-
-
-
-
-
-
-            </CollectionView>
-
-
+            <CarouselView x:Name="CvGroups" PeekAreaInsets="165">
+                <CarouselView.ItemsLayout >
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CarouselView.ItemsLayout>
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame Padding="0"
+                               Margin="10,75,0,10"
+                                CornerRadius="100"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                IsClippedToBounds="True"
+                                VerticalOptions="Start"
+                                HorizontalOptions="StartAndExpand">
+                                <StackLayout>
+                                    <Image Source="{Binding PictureUrl}"
+                               Margin="0" 
+                               Aspect="AspectFill"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand" />
+                                </StackLayout>
+                            </Frame>
+                            <Label Text="{Binding GroupName}"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
 
             <Grid ColumnSpacing="0"
                   HorizontalOptions="FillAndExpand"

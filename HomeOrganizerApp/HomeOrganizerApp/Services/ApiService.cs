@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
@@ -49,6 +51,17 @@ namespace HomeOrganizerApp.Services
             Preferences.Set("Avatar", result.AvatarUrl);
 
             return true;
+        }
+
+        public static async Task<List<GroupDto>> GetMyGroups()
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Group");
+            var resp = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<GroupDto>>(resp);
+            return result;
         }
     }
 }
