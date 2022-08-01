@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace HomeOrganizerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : ContentPage
+    public partial class TodoPage : ContentPage
     {
-        public HomePage()
+        public TodoPage()
         {
             InitializeComponent();
         }

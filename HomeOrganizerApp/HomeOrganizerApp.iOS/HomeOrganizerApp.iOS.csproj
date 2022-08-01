@@ -139,4 +139,22 @@
   <ItemGroup>
     <BundleResource Include="Resources\backarrow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\tick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\menu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\logout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\touchface.png" />
+  </ItemGroup>
 </Project>

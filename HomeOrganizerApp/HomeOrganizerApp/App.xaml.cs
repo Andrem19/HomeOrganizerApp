@@ -11,7 +11,6 @@ namespace HomeOrganizerApp
         public App()
         {
             InitializeComponent();
-
             var accesstoken = Preferences.Get("accessToken", string.Empty);
             if (string.IsNullOrEmpty(accesstoken))
             {
@@ -19,7 +18,7 @@ namespace HomeOrganizerApp
             }
             else
             {
-                MainPage = new NavigationPage(new HomePage());
+                MainPage = new ShellHomePage();
             }
         }
 

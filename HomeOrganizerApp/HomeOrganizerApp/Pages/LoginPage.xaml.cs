@@ -30,7 +30,7 @@ namespace HomeOrganizerApp.Pages
 
             if (response)
             {
-                Application.Current.MainPage = new NavigationPage(new HomePage());
+                Application.Current.MainPage = new ShellHomePage();
             }
             else
             {

@@ -46,6 +46,7 @@ namespace HomeOrganizerApp.Services
             Preferences.Set("accessToken", result.Token);
             Preferences.Set("userName", result.DisplayName);
             Preferences.Set("Email", result.Email);
+            Preferences.Set("Avatar", result.AvatarUrl);
 
             return true;
         }
