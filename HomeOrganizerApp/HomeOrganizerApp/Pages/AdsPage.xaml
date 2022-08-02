@@ -9,38 +9,72 @@
     <ContentPage.Content>
         <Grid>
 
-            <CarouselView x:Name="CvGroups" PeekAreaInsets="165">
-                <CarouselView.ItemsLayout >
-                    <LinearItemsLayout Orientation="Horizontal" />
-                </CarouselView.ItemsLayout>
-                <CarouselView.ItemTemplate>
+            <CollectionView x:Name="CvAds"
+                            SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="1" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <StackLayout>
+                        <CollectionView  x:Name="CvGroups"
+                                         HeightRequest="110"
+                                         Margin="0,80,0,0"
+                                         SelectionMode="Single"
+                                         SelectionChanged="CvGroups_SelectionChanged"
+                                         BindingContext="{Binding Id}"
+                                         >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Frame Padding="0"
+                                               BackgroundColor="Transparent"
+                                               Margin="10,0,10,0"
+                                               HasShadow="True">
+                                            <StackLayout Orientation="Vertical"
+                                                         >
+                                                <Frame Padding="0"
+                                                       CornerRadius="100"
+                                                       IsClippedToBounds="True"
+                                                       HeightRequest="70"
+                                                       WidthRequest="70"
+                                                       HorizontalOptions="Center">
+                                                    <Image Aspect="AspectFill"
+                                                           HorizontalOptions="FillAndExpand"
+                                                           VerticalOptions="FillAndExpand"
+                                                           Source="{Binding PictureUrl}"/>
+                                                </Frame>
+                                                <Label TextColor="#3F4946"
+                                                       HorizontalTextAlignment="Center"
+                                                       FontSize="Medium"
+                                                       Text="{Binding GroupName}"/>
+                                            </StackLayout>
+                                        </Frame>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </StackLayout>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
+                        <StackLayout Margin="7" Orientation="Vertical">
+                            <Label Margin="15,0,0,0" Text="{Binding AuthorName}" FontAttributes="Bold"/>
                             <Frame Padding="0"
-                               Margin="10,75,0,10"
-                                CornerRadius="100"
-                                HeightRequest="70"
-                                WidthRequest="70"
-                                IsClippedToBounds="True"
-                                VerticalOptions="Start"
-                                HorizontalOptions="StartAndExpand">
-                                <StackLayout>
-                                    <Image Source="{Binding PictureUrl}"
-                               Margin="0" 
-                               Aspect="AspectFill"
-                               HorizontalOptions="FillAndExpand"
-                               VerticalOptions="FillAndExpand" />
-                                </StackLayout>
+                                   CornerRadius="100"
+                                   BackgroundColor="#E4E4E4"
+                                   Margin="10,0,10,0"
+                                   HasShadow="True">
+                                <Label Text="{Binding TextBody}"/>
                             </Frame>
-                            <Label Text="{Binding GroupName}"
-                               FontAttributes="Bold"
-                               FontSize="Medium"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center" />
                         </StackLayout>
                     </DataTemplate>
-                </CarouselView.ItemTemplate>
-            </CarouselView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Grid ColumnSpacing="0"
                   HorizontalOptions="FillAndExpand"

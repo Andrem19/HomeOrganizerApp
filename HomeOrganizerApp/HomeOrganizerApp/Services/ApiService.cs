@@ -63,5 +63,15 @@ namespace HomeOrganizerApp.Services
             var result = JsonConvert.DeserializeObject<List<GroupDto>>(resp);
             return result;
         }
+        public static async Task<List<AdDto>> GetAdsByGroupId(int groupId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Ad?GroupId=" + groupId);
+            var resp = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<AdDto>>(resp);
+            return result;
+        }
     }
 }

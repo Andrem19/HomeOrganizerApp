@@ -16,10 +16,12 @@ namespace HomeOrganizerApp.Pages
     public partial class AdsPage : ContentPage
     {
         public ObservableCollection<GroupDto> GroupCollection;
+        public ObservableCollection<AdDto> AdsCollection;
         public AdsPage()
         {
             InitializeComponent();
             GroupCollection = new ObservableCollection<GroupDto>();
+            AdsCollection = new ObservableCollection<AdDto>();
             setUpAvatar();
             LoadMyGroups();
         }
@@ -35,20 +37,47 @@ namespace HomeOrganizerApp.Pages
             }
         }
 
+        public void ChooseGroup(int index)
+        {
+            var groups = GroupCollection.ToList();
+
+                for (int i = 0; i < groups[index].Ad.Count; i++)
+                {
+                    AdsCollection.Add(groups[index].Ad[i]);
+                }
+
+            CvAds.ItemsSource = AdsCollection;
+        }
+
         public async void LoadMyGroups()
         {
             var groups = await ApiService.GetMyGroups();
-            foreach (var group in groups)
+            if (groups.Count<1)
             {
-                GroupCollection.Add(group);
+                await Navigation.PushModalAsync(new InviteCodePage());
+            }
+            while (GroupCollection.Count<5)
+            {
+                foreach (var group in groups)
+                {
+                    GroupCollection.Add(group);
+                }
             }
             CvGroups.ItemsSource = GroupCollection;
-
+            ChooseGroup(0);
         }
 
-        private void CvGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void CvGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var currentSelection = e.CurrentSelection.FirstOrDefault() as GroupDto;
+            var ads = await ApiService.GetAdsByGroupId(currentSelection.Id);
+            AdsCollection.Clear();
+            for (int i = 0; i < ads.Count; i++)
+            {
+                AdsCollection.Add(ads[i]);
+            }
 
+            CvAds.ItemsSource = AdsCollection;
         }
 
         private void TapLogout_Tapped(object sender, EventArgs e)
@@ -71,6 +100,11 @@ namespace HomeOrganizerApp.Pages
         {
             GridOverlay.IsVisible = true;
             await SlMenu.TranslateTo(0, 0, 400, Easing.Linear);
+        }
+
+        private void TodoTask_Change(object sender, CheckedChangedEventArgs e)
+        {
+
         }
     }
 }

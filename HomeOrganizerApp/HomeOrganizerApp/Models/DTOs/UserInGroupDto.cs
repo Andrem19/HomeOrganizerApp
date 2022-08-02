@@ -6,17 +6,12 @@
         public string Name { get; set; }
         public string UserId { get; set; }
         public ROLE Role { get; set; }
-        public MainPageChoise MainPageChoise { get; set; }
+        public double Percent { get; set; }
     }
     public enum ROLE
     {
         CREATOR,
         MODERATOR,
         MEMBER
-    }
-    public enum MainPageChoise
-    {
-        Ad,
-        PayLoads
     }
 }
