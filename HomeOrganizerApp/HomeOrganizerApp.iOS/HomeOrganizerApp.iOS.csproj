@@ -157,4 +157,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\touchface.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\grab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\plus.png" />
+  </ItemGroup>
 </Project>

@@ -48,9 +48,29 @@ namespace HomeOrganizerApp.Services
             Preferences.Set("accessToken", result.Token);
             Preferences.Set("userName", result.DisplayName);
             Preferences.Set("Email", result.Email);
-            Preferences.Set("Avatar", result.AvatarUrl);
-
+            Preferences.Set("InviteCode", result.InviteCode);
             return true;
+        }
+        public static async Task<bool> PostAvatar(MultipartFormDataContent content, string groupId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.PostAsync(AppSettings.ApiUrl + "api/Account/Avatar?groupId=" + groupId, content);
+            if (!response.IsSuccessStatusCode) return false;
+            return true;
+        }
+        public static async Task<string> GetAvatar(string groupId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Account/Avatar?groupId=" + groupId);
+            if (!string.IsNullOrEmpty(response))
+            {
+                return response;
+            }
+            return null;
         }
 
         public static async Task<List<GroupDto>> GetMyGroups()
@@ -63,6 +83,18 @@ namespace HomeOrganizerApp.Services
             var result = JsonConvert.DeserializeObject<List<GroupDto>>(resp);
             return result;
         }
+        public static async Task<string> MyRoleInTheGroup(string groupId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Group/roleingroup?groupId=" + groupId);
+            if (!string.IsNullOrEmpty(response))
+            {
+                Preferences.Set("MyRole", response);
+            }
+            return response;
+        }
         public static async Task<List<AdDto>> GetAdsByGroupId(int groupId)
         {
             string token = Preferences.Get("accessToken", string.Empty);
@@ -71,6 +103,18 @@ namespace HomeOrganizerApp.Services
             var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Ad?GroupId=" + groupId);
             var resp = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<AdDto>>(resp);
+            return result;
+        }
+        public static async Task<AdDto> PostAd(AdDto Ad)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            var json = JsonConvert.SerializeObject(Ad);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.PostAsync(AppSettings.ApiUrl + "api/Ad", content);
+            var resp = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<AdDto>(resp);
             return result;
         }
     }

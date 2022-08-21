@@ -45,7 +45,8 @@
                                                     <Image Aspect="AspectFill"
                                                            HorizontalOptions="FillAndExpand"
                                                            VerticalOptions="FillAndExpand"
-                                                           Source="{Binding PictureUrl}"/>
+                                                           Source="{Binding PictureUrl}">
+                                                    </Image>
                                                 </Frame>
                                                 <Label TextColor="#3F4946"
                                                        HorizontalTextAlignment="Center"
@@ -57,24 +58,76 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="6*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="0, 2, 0, 2" Grid.Column="1" HorizontalOptions="CenterAndExpand" FontSize="Large" FontAttributes="Bold" x:Name="Group_Label" />
+                            <Image x:Name="plus_ads" Margin="10, 5, 10, 5" WidthRequest="30" HeightRequest="30" Source="plus.png" Grid.Column="2">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Tapped="OnPlusTapped"
+                                        NumberOfTapsRequired="1" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Grid>
                     </StackLayout>
+                
+                    
                 </CollectionView.Header>
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Margin="7" Orientation="Vertical">
-                            <Label Margin="15,0,0,0" Text="{Binding AuthorName}" FontAttributes="Bold"/>
-                            <Frame Padding="0"
-                                   CornerRadius="100"
-                                   BackgroundColor="#E4E4E4"
-                                   Margin="10,0,10,0"
-                                   HasShadow="True">
-                                <Label Text="{Binding TextBody}"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="6*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Frame CornerRadius="100"
+                                       Padding="0"
+                                       Grid.Row="0"
+                                       Grid.Column="0"
+                                       IsClippedToBounds="True"
+                                       HorizontalOptions="Center">
+                                <Image x:Name="AutorAvatar" 
+                                           Source="touchface.png" 
+                                           HeightRequest="50"
+                                           WidthRequest="50"/>
                             </Frame>
-                        </StackLayout>
+                            <Label Margin="15,0,0,0" Text="{Binding AuthorName}" FontSize="Small" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
+                            <StackLayout Grid.Column="1"
+                                             Grid.ColumnSpan="2"
+                                             Grid.Row="0" Grid.RowSpan="3"
+                                             VerticalOptions="StartAndExpand"
+                                             HorizontalOptions="Start"
+                                             Spacing="0"
+                                             Margin="10,0,10,10">
+                                <Frame Padding="5"
+                                   VerticalOptions="Center"
+                                   CornerRadius="15"
+                                   BackgroundColor="#E4E4E4"
+                                   Margin="5,0,5,0"
+                                   HasShadow="True">
+                                    <Label Text="{Binding TextBody}"/>
+                                </Frame>
+                            </StackLayout>
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            
 
             <Grid ColumnSpacing="0"
                   HorizontalOptions="FillAndExpand"
@@ -83,8 +136,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                     <RowDefinition Height="20" />
-                    <RowDefinition Height="60" />
-                    <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -111,14 +162,10 @@
                         </Image.GestureRecognizers>
                     </Image>
                 </StackLayout>
-                <Image Margin="0,15,0,0"
-                       HorizontalOptions="CenterAndExpand"
-                       VerticalOptions="CenterAndExpand"
-                       Source="SushiPointLogoWebSite.png"
-                       Aspect="AspectFit"
-                       Grid.Row="0"
-                       Grid.Column="1"
-                       Grid.RowSpan="3" />
+
+                
+                
+                
             </Grid>
             <Grid x:Name="GridOverlay"
                   IsVisible="False"
@@ -136,21 +183,39 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="6*" />
                         </Grid.ColumnDefinitions>
                         <Frame Padding="0"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
                                Margin="5,10,0,10"
                                 CornerRadius="100"
                                 IsClippedToBounds="True"
                                 HorizontalOptions="Center">
                             <Image x:Name="AvatarImg" Source=""
-                               Margin="0" 
                                Aspect="AspectFill"
                                HorizontalOptions="FillAndExpand"
                                VerticalOptions="FillAndExpand"/>
                         </Frame>
-                        <StackLayout Grid.Column="1"
+                        <Image Grid.Column="0"
+                               Grid.Row="0"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Margin="8, 8, 0, 0"
+                               x:Name="UpdateAvatar"
+                               Source="grab.png"
+                               HeightRequest="18"
+                               WidthRequest="18"
+                                   >
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                        Tapped="OnImageAvatarTapped"
+                                        NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <StackLayout Grid.Column="2"
                                      VerticalOptions="Center"
                                      Spacing="0"
                                      Margin="10,0,10,0">
