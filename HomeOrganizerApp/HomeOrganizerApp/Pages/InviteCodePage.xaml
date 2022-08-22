@@ -31,6 +31,7 @@
 
             <StackLayout Margin="20, 0, 20, 0">
                 <Button Margin="0, 15, 0, 0" BackgroundColor="#3F4946" CornerRadius="15" FontAttributes="Bold" FontSize="Large" x:Name="ButtonCode" Clicked="ButtonCode_Button"/>
+                <Button WidthRequest="150" Text="Change Code" HorizontalOptions="End" Margin="0, 15, 0, 0" BackgroundColor="#A32727" CornerRadius="15" FontAttributes="Bold" FontSize="Small" x:Name="ChangeCode" Clicked="ChangeCode_Button"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

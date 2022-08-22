@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HomeOrganizerApp.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,12 @@ namespace HomeOrganizerApp.Pages
         private void TapBack_Tapped(object sender, EventArgs e)
         {
             Navigation.PopModalAsync();
+        }
+
+        private async void ChangeCode_Button(object sender, EventArgs e)
+        {
+            await ApiService.ChangeInviteCode();
+            InitInviteCode();
         }
     }
 }

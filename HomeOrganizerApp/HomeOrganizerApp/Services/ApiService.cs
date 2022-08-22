@@ -126,5 +126,17 @@ namespace HomeOrganizerApp.Services
             var result = JsonConvert.DeserializeObject<AdDto>(resp);
             return result;
         }
+        public static async Task<bool> ChangeInviteCode()
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Account/changeInviteCode");
+            if (!string.IsNullOrEmpty(response))
+            {
+                Preferences.Set("InviteCode", response);
+            }
+            return true;
+        }
     }
 }

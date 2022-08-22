@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HomeOrganizerApp.Pages.UsersInGroup">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="backarrow.png"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="TapBack" Tapped="TapBack_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Grid.Column="1"
+                       Grid.Row="0"
+                       TextColor="#3F4946"
+                       x:Name="UsersInGroupTitle"
+                       Text="Settings"
+                       FontSize="Medium"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Entry x:Name="InviteCodeField" Placeholder="Invite Code" />
+                    <Button Clicked="AddNewUser" Text="Add To Group"/>
+                </StackLayout>
+            </Grid>
+            <CollectionView x:Name="CvUsers"
+                        SelectionMode="Single" Margin="0, 5, 0, 0">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                    Span="1" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="3*" />
+                                </Grid.ColumnDefinitions>
+                                <Frame Grid.Row="0" 
+                                       Grid.Column="0" 
+                                       CornerRadius="100"
+                                       Padding="0"
+                                       IsClippedToBounds="True"
+                                       HeightRequest="50"
+                                       WidthRequest="50"
+                                       HorizontalOptions="Center">
+                                <Image HeightRequest="40" HorizontalOptions="Center"  Source="{Binding AvatarUrl}"/>
+                                </Frame>
+                                <Label FontSize="Micro" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0" Text="{Binding Name}"/>
+                                <Label Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Text="{Binding Role}"/>
+                                <Image Grid.Row="0" Grid.Column="2" Source="settinguser.png" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Center">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            CommandParameter="{Binding UserId}"
+                                            Tapped="UserSettingsTapped"
+                                            NumberOfTapsRequired="1" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

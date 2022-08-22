@@ -35,15 +35,10 @@ namespace HomeOrganizerApp.Pages
                 await ApiService.MyRoleInTheGroup(currentGroup);
                 role = Preferences.Get("MyRole", string.Empty);
             }
-            settings_img.IsVisible = false;
             plus_ads.IsVisible = false;
             if (role == "CREATOR" || role == "MODERATOR")
             {
                 plus_ads.IsVisible = true;
-            }
-            if (role == "CREATOR")
-            {
-                settings_img.IsVisible = true;
             }
         }
         public async void setUpAvatar()
@@ -246,7 +241,22 @@ namespace HomeOrganizerApp.Pages
 
         private async void GroupSettings_Tapped(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new GroupSettings());
+            string grId = Preferences.Get("CurrentGroup", string.Empty);
+            var role = Preferences.Get("MyRole", string.Empty);
+            if (!string.IsNullOrEmpty(grId))
+            {
+                List<GroupDto> grp = GroupCollection.ToList();
+                var group = grp.FirstOrDefault(x => x.Id == Convert.ToInt32(grId));
+                if (role == "CREATOR")
+                {
+                    await Navigation.PushModalAsync(new GroupSettings(group.GroupName));
+                }
+                else
+                {
+                    await Navigation.PushModalAsync(new MemberGroupSettings(group.GroupName));
+                }
+            }
+            
         }
     }
 }
