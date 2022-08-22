@@ -24,20 +24,17 @@ namespace HomeOrganizerApp.Pages
             Navigation.PopModalAsync();
         }
 
-        private void TapClearTapped(object sender, EventArgs e)
-        {
-            Editor_Name.Text = "";
-        }
-
         private async void Send_Button(object sender, EventArgs e)
         {
             AdDto ad = new AdDto();
             ad.AuthorName = Preferences.Get("userName", string.Empty);
             ad.TextBody = Editor_Name.Text;
+            ad.AuthorId = "none";
+            ad.AuthorAvatar = "none";
             ad.IsVoting = false;
             ad.GroupId = Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty));
             await ApiService.PostAd(ad);
-            await Navigation.PushModalAsync(new AdsPage(Preferences.Get("CurrentGroup", string.Empty)));
+            await Navigation.PopModalAsync();
         }
     }
 }

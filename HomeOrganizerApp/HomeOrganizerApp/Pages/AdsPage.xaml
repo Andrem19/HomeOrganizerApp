@@ -8,7 +8,6 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <Grid>
-
             <CollectionView x:Name="CvAds"
                             SelectionMode="Single">
                 <CollectionView.ItemsLayout>
@@ -30,12 +29,26 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout Orientation="Horizontal">
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal" />
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="#cccccc" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
                                         <Frame Padding="0"
                                                BackgroundColor="Transparent"
                                                Margin="10,0,10,0"
                                                HasShadow="True">
                                             <StackLayout Orientation="Vertical"
                                                          >
+
                                                 <Frame Padding="0"
                                                        CornerRadius="100"
                                                        IsClippedToBounds="True"
@@ -101,7 +114,7 @@
                                        IsClippedToBounds="True"
                                        HorizontalOptions="Center">
                                 <Image x:Name="AutorAvatar" 
-                                           Source="touchface.png" 
+                                           Source="{Binding AuthorAvatar}" 
                                            HeightRequest="50"
                                            WidthRequest="50"/>
                             </Frame>
@@ -162,11 +175,21 @@
                         </Image.GestureRecognizers>
                     </Image>
                 </StackLayout>
-
-                
-                
-                
+                <StackLayout Orientation="Horizontal"
+                             Grid.Row="0"
+                             Grid.Column="2">
+                <Image Source="settings.png"
+                           HorizontalOptions="End"
+                           Margin="0,20,20,0"
+                           HeightRequest="30"
+                           x:Name="settings_img">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="SettingsImg" Tapped="GroupSettings_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+                </StackLayout>
             </Grid>
+            
             <Grid x:Name="GridOverlay"
                   IsVisible="False"
                   ColumnSpacing="0">
@@ -229,7 +252,36 @@
                                    TextColor="White" />
                         </StackLayout>
                     </Grid>
- 
+                    <StackLayout Spacing="30"
+                                 Orientation="Horizontal"
+                                 Margin="20,0,0,0">
+                        <Image Source="addgroupm.png"
+                               HeightRequest="30"
+                               WidthRequest="30" />
+                        <Label Text="Create Group"
+                               TextColor="#3F4946"
+                               HeightRequest="50"
+                               VerticalTextAlignment="Center"
+                               FontSize="17" />
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="TapCreateGroup" Tapped="TapCreateGroup_Tapped" />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                    <StackLayout Spacing="30"
+                                 Orientation="Horizontal"
+                                 Margin="20,0,0,0">
+                        <Image Source="adduser.png"
+                               HeightRequest="30"
+                               WidthRequest="30" />
+                        <Label Text="My Invite Code"
+                               TextColor="#3F4946"
+                               HeightRequest="50"
+                               VerticalTextAlignment="Center"
+                               FontSize="17" />
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="TapInviteCode" Tapped="TapInviteCode_Tapped" />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
                     <StackLayout Spacing="30"
                                  Orientation="Horizontal"
                                  Margin="20,0,0,0">
@@ -240,7 +292,7 @@
                                TextColor="#3F4946"
                                HeightRequest="50"
                                VerticalTextAlignment="Center"
-                               FontSize="20" />
+                               FontSize="17" />
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer x:Name="TapLogout" Tapped="TapLogout_Tapped" />
                         </StackLayout.GestureRecognizers>

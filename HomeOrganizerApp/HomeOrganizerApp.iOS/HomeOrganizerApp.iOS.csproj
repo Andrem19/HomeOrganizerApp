@@ -163,4 +163,19 @@
   <ItemGroup>
     <BundleResource Include="Resources\plus.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\adduser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\addgroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\addgroupm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\settings.png" />
+  </ItemGroup>
 </Project>

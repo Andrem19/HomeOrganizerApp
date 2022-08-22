@@ -21,85 +21,102 @@ namespace HomeOrganizerApp.Pages
         public ObservableCollection<GroupDto> GroupCollection;
         public ObservableCollection<AdDto> AdsCollection;
         private MediaFile _mediaFile;
-        public AdsPage(string groupId)
-        {
-            InitializeComponent();
-            GroupCollection = new ObservableCollection<GroupDto>();
-            AdsCollection = new ObservableCollection<AdDto>();
-            LoadMyGroups(groupId);
-            setUpAvatar();
-            isPlusVisible();
 
-        }
         public AdsPage()
         {
             InitializeComponent();
-            GroupCollection = new ObservableCollection<GroupDto>();
-            AdsCollection = new ObservableCollection<AdDto>();
-            LoadMyGroups();
-            setUpAvatar();
-            isPlusVisible();
-            
         }
         public async void isPlusVisible()
         {
-            await ApiService.MyRoleInTheGroup(Preferences.Get("CurrentGroup", string.Empty));
-            var role = Preferences.Get("MyRole", string.Empty);
+            var currentGroup = Preferences.Get("CurrentGroup", string.Empty);
+            var role = "none";
+            if (!string.IsNullOrEmpty(currentGroup))
+            {
+                await ApiService.MyRoleInTheGroup(currentGroup);
+                role = Preferences.Get("MyRole", string.Empty);
+            }
+            settings_img.IsVisible = false;
+            plus_ads.IsVisible = false;
             if (role == "CREATOR" || role == "MODERATOR")
             {
                 plus_ads.IsVisible = true;
             }
-            else
+            if (role == "CREATOR")
             {
-                plus_ads.IsVisible = false;
+                settings_img.IsVisible = true;
             }
         }
         public async void setUpAvatar()
         {
             AvatarImg.Source = "touchface.png";
             LblUserName.Text = Preferences.Get("userName", string.Empty);
-            var picture = await ApiService.GetAvatar(Preferences.Get("CurrentGroup", string.Empty));
-            if (!string.IsNullOrEmpty(picture))
+            string curGroup = Preferences.Get("CurrentGroup", string.Empty);
+            if (!string.IsNullOrEmpty(curGroup))
             {
-                AvatarImg.Source = picture;
+                var picture = await ApiService.GetAvatar(curGroup);
+                if (!string.IsNullOrEmpty(picture))
+                {
+                    AvatarImg.Source = picture;
+                }
             }
         }
 
         public async void ChooseGroup(int index)
         {
             var groups = GroupCollection.ToList();
-            var ads = await ApiService.GetAdsByGroupId(groups[index].Id);
-            ads.Reverse();
-            
-            Group_Label.Text = $"{groups[index].GroupName} Group";
-            Preferences.Set("CurrentGroup", groups[index].Id.ToString());
-            for (int i = 0; i < ads.Count; i++)
+            if (groups.Count > 1)
             {
-                AdsCollection.Add(ads[i]);
+                var ads = await ApiService.GetAdsByGroupId(groups[index].Id);
+                ads.Reverse();
+
+                Group_Label.Text = $"{groups[index].GroupName} Group";
+                Preferences.Set("CurrentGroup", groups[index].Id.ToString());
+                for (int i = 0; i < ads.Count; i++)
+                {
+                    AdsCollection.Add(ads[i]);
+                }
+                CvAds.ItemsSource = AdsCollection;
+                CvGroups.SelectedItem = GroupCollection[index];
             }
-            CvAds.ItemsSource = AdsCollection;
         }
 
-        public async void LoadMyGroups(string groupId = "0")
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            GroupCollection = new ObservableCollection<GroupDto>();
+            AdsCollection = new ObservableCollection<AdDto>();
+            LoadMyGroups();
+            setUpAvatar();
+            isPlusVisible();
+        }
+
+        public async void LoadMyGroups()
         {
             var groups = await ApiService.GetMyGroups();
-            if (groups.Count<1)
-            {
-                await Navigation.PushModalAsync(new InviteCodePage());
-            }
-            while (GroupCollection.Count<5)
+            if (groups != null)
             {
                 foreach (var group in groups)
                 {
+                    if (string.IsNullOrEmpty(group.PictureUrl))
+                    {
+                        group.PictureUrl = "people.png";
+                    }
                     GroupCollection.Add(group);
                 }
             }
+            GroupDto addGroup = new GroupDto();
+            addGroup.Id = 0;
+            addGroup.GroupName = "Create New";
+            addGroup.PictureUrl = "addgroup.png";
+            GroupCollection.Add(addGroup);
             CvGroups.ItemsSource = GroupCollection;
+
+            string grId = Preferences.Get("CurrentGroup", string.Empty);
             int index = 0;
-            if (groupId != "0")
+            if (!string.IsNullOrEmpty(grId))
             {
                 List<GroupDto> grp = GroupCollection.ToList();
-                index = grp.FindIndex(x => x.Id == Convert.ToInt32(groupId));
+                index = grp.FindIndex(x => x.Id == Convert.ToInt32(grId));
             }
             ChooseGroup(index);
         }
@@ -108,25 +125,39 @@ namespace HomeOrganizerApp.Pages
         {
 
             var currentSelection = e.CurrentSelection.FirstOrDefault() as GroupDto;
-            var ads = await ApiService.GetAdsByGroupId(currentSelection.Id);
-            ads.Reverse();
-            Group_Label.Text = $"{currentSelection.GroupName} Group";
-            Preferences.Set("CurrentGroup", currentSelection.Id.ToString());
-            setUpAvatar();
-            isPlusVisible();
-            AdsCollection.Clear();
-            for (int i = 0; i < ads.Count; i++)
+            if (currentSelection.Id != 0)
             {
-                AdsCollection.Add(ads[i]);
-            }
+                var ads = await ApiService.GetAdsByGroupId(currentSelection.Id);
+                ads.Reverse();
+                Group_Label.Text = $"{currentSelection.GroupName} Group";
+                Preferences.Set("CurrentGroup", currentSelection.Id.ToString());
+                setUpAvatar();
+                isPlusVisible();
+                AdsCollection.Clear();
+                for (int i = 0; i < ads.Count; i++)
+                {
+                    AdsCollection.Add(ads[i]);
+                }
 
-            CvAds.ItemsSource = AdsCollection;
+                CvAds.ItemsSource = AdsCollection;
+            }
+            else if (currentSelection.Id == 0)
+            {
+                List<GroupDto> grp = GroupCollection.ToList();
+                int index = grp.FindIndex(x => x.Id == Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty)));
+                CvGroups.SelectedItem = GroupCollection[index];
+                await Navigation.PushModalAsync(new CreateNewGroup());
+            }
         }
 
         private void TapLogout_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("accessToken", string.Empty);
             Preferences.Set("tokenExpirationTime", 0);
+            Preferences.Set("CurrentGroup", string.Empty);
+            Preferences.Set("InviteCode", string.Empty);
+            Preferences.Set("Email", string.Empty);
+            Preferences.Set("userName", string.Empty);
             Application.Current.MainPage = new NavigationPage(new SignupPage());
         }
 
@@ -201,6 +232,21 @@ namespace HomeOrganizerApp.Pages
             }
 
             CvAds.ItemsSource = AdsCollection;
+        }
+
+        private async void TapInviteCode_Tapped(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new InviteCodePage());
+        }
+
+        private async void TapCreateGroup_Tapped(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new CreateNewGroup());
+        }
+
+        private async void GroupSettings_Tapped(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new GroupSettings());
         }
     }
 }

@@ -72,7 +72,16 @@ namespace HomeOrganizerApp.Services
             }
             return null;
         }
-
+        public static async Task<string> CreateGroup(string name)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Group/create?Name=" + name);
+            var resp = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<GroupDto>(resp);
+            return result.Id.ToString();
+        }
         public static async Task<List<GroupDto>> GetMyGroups()
         {
             string token = Preferences.Get("accessToken", string.Empty);

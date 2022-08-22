@@ -23,24 +23,12 @@
                        FontSize="Medium"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center" />
-                <Label Grid.Column="2"
-                       TextColor="#3F4946"
-                       Text="Clear"
-                       FontSize="Medium"
-                       CharacterSpacing="1"
-                       FontAttributes="Bold"
-                       VerticalTextAlignment="End"
-                       HorizontalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer x:Name="TapClearCart" Tapped="TapClearTapped" />
-                    </Label.GestureRecognizers>
-                </Label>
             </Grid>
             <StackLayout>
                 <Frame Margin="15, 0, 15, 0" CornerRadius="15" Padding="0" IsClippedToBounds="True">
                     <Editor x:Name="Editor_Name" TextColor="White" BackgroundColor="#3F4946" HeightRequest="75" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
                 </Frame>
-                <Button Clicked="Send_Button" BackgroundColor="#3F4946" CornerRadius="15" Margin="150, 5, 150, 5" Text="Send" HorizontalOptions="EndAndExpand" />
+                <Button Clicked="Send_Button" BackgroundColor="#3F4946" CornerRadius="15" Margin="0, 5, 15, 5" Text="Send" HorizontalOptions="End" Grid.Column="2" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
