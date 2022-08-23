@@ -45,10 +45,13 @@ namespace HomeOrganizerApp.Pages
         }
         private async void AddNewUser(object sender, EventArgs e)
         {
-            await ApiGroupSettings.AddUserToTheGroup(InviteCodeField.Text, Preferences.Get("CurrentGroup", string.Empty));
-            UserCollection.Clear();
-            InviteCodeField.Text = "";
-            LoadUsers();
+            if (!string.IsNullOrEmpty(InviteCodeField.Text))
+            {
+                await ApiGroupSettings.AddUserToTheGroup(InviteCodeField.Text, Preferences.Get("CurrentGroup", string.Empty));
+                UserCollection.Clear();
+                InviteCodeField.Text = "";
+                LoadUsers();
+            }
         }
 
         private async void UserSettingsTapped(object sender, EventArgs e)

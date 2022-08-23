@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -20,8 +21,9 @@ namespace HomeOrganizerApp.Pages
     {
         public ObservableCollection<GroupDto> GroupCollection;
         public ObservableCollection<AdDto> AdsCollection;
+        public List<AdDto> AllAds { get; set; } = new List<AdDto>();
+        public int currentCount { get; set; }
         private MediaFile _mediaFile;
-
         public AdsPage()
         {
             InitializeComponent();
@@ -61,14 +63,16 @@ namespace HomeOrganizerApp.Pages
             var groups = GroupCollection.ToList();
             if (groups.Count > 1)
             {
-                var ads = await ApiService.GetAdsByGroupId(groups[index].Id);
-                ads.Reverse();
+                AllAds = await ApiService.GetAdsByGroupId(groups[index].Id);
+                AllAds.Reverse();
 
                 Group_Label.Text = $"{groups[index].GroupName} Group";
                 Preferences.Set("CurrentGroup", groups[index].Id.ToString());
-                for (int i = 0; i < ads.Count; i++)
+                currentCount = AllAds.Count > 10 ? 10 : AllAds.Count;
+                
+                for (int i = 0; i < currentCount; i++)
                 {
-                    AdsCollection.Add(ads[i]);
+                    AdsCollection.Add(AllAds[i]);
                 }
                 CvAds.ItemsSource = AdsCollection;
                 CvGroups.SelectedItem = GroupCollection[index];
@@ -83,6 +87,20 @@ namespace HomeOrganizerApp.Pages
             LoadMyGroups();
             setUpAvatar();
             isPlusVisible();
+
+            CvAds.RemainingItemsThreshold = 3;
+            CvAds.RemainingItemsThresholdReached += CvAds_RemainingItemsThresholdReached;
+        }
+
+        private void CvAds_RemainingItemsThresholdReached(object sender, EventArgs e)
+        {
+            var count = AllAds.Count > (currentCount + 10) ? currentCount + 10 : AllAds.Count;
+            currentCount = count;
+            for (int i = 0; i < currentCount; i++)
+            {
+                AdsCollection.Add(AllAds[i]);
+            }
+            Task.Delay(2000);
         }
 
         public async void LoadMyGroups()
@@ -122,16 +140,17 @@ namespace HomeOrganizerApp.Pages
             var currentSelection = e.CurrentSelection.FirstOrDefault() as GroupDto;
             if (currentSelection.Id != 0)
             {
-                var ads = await ApiService.GetAdsByGroupId(currentSelection.Id);
-                ads.Reverse();
+                AllAds = await ApiService.GetAdsByGroupId(currentSelection.Id);
+                AllAds.Reverse();
                 Group_Label.Text = $"{currentSelection.GroupName} Group";
                 Preferences.Set("CurrentGroup", currentSelection.Id.ToString());
                 setUpAvatar();
                 isPlusVisible();
                 AdsCollection.Clear();
-                for (int i = 0; i < ads.Count; i++)
+                currentCount = AllAds.Count > 10 ? 10 : AllAds.Count;
+                for (int i = 0; i < currentCount; i++)
                 {
-                    AdsCollection.Add(ads[i]);
+                    AdsCollection.Add(AllAds[i]);
                 }
 
                 CvAds.ItemsSource = AdsCollection;

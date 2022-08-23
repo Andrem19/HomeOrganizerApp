@@ -37,8 +37,11 @@ namespace HomeOrganizerApp.Pages
 
         private async void ChangeName_Button(object sender, EventArgs e)
         {
-            await ApiGroupSettings.ChangeGroupName(NameOfGroup.Text, Preferences.Get("CurrentGroup", string.Empty));
-            await Navigation.PopModalAsync();
+            if (!string.IsNullOrEmpty(NameOfGroup.Text))
+            {
+                await ApiGroupSettings.ChangeGroupName(NameOfGroup.Text, Preferences.Get("CurrentGroup", string.Empty));
+                await Navigation.PopModalAsync();
+            }
         }
 
         private async void SetAvatar_Button(object sender, EventArgs e)

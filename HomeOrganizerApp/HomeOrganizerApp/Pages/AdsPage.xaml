@@ -8,6 +8,7 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout>
+            <Grid>
             <Grid ColumnSpacing="0"
                   HorizontalOptions="FillAndExpand"
                   VerticalOptions="Start"
@@ -16,6 +17,7 @@
                     <RowDefinition Height="40" />
                     <RowDefinition Height="20" />
                     <RowDefinition Height="145" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -56,60 +58,60 @@
                     </Image>
                 </StackLayout>
                 <StackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
-                <CollectionView  x:Name="CvGroups"
+                    <CollectionView  x:Name="CvGroups"
                                  Margin="0, 7, 0, 0"
                                  SelectionMode="Single"
                                  SelectionChanged="CvGroups_SelectionChanged"
                                  BindingContext="{Binding Id}"
                                  >
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Horizontal">
 
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup Name="CommonStates">
-                                        <VisualState Name="Normal" />
-                                        <VisualState Name="Selected">
-                                            <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="#cccccc" />
-                                            </VisualState.Setters>
-                                        </VisualState>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal" />
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#cccccc" />
+                                                </VisualState.Setters>
+                                            </VisualState>
 
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
 
-                                <Frame Padding="0"
+                                    <Frame Padding="0"
                                                BackgroundColor="Transparent"
                                                Margin="10,0,10,0"
                                                HasShadow="True">
-                                    <StackLayout Orientation="Vertical"
+                                        <StackLayout Orientation="Vertical"
                                                          >
 
-                                        <Frame Padding="0"
+                                            <Frame Padding="0"
                                                        CornerRadius="100"
                                                        IsClippedToBounds="True"
                                                        HeightRequest="70"
                                                        WidthRequest="70"
                                                        HorizontalOptions="Center">
-                                            <Image Aspect="AspectFill"
+                                                <Image Aspect="AspectFill"
                                                            HorizontalOptions="FillAndExpand"
                                                            VerticalOptions="FillAndExpand"
                                                            Source="{Binding PictureUrl}">
-                                            </Image>
-                                        </Frame>
-                                        <Label TextColor="#3F4946"
+                                                </Image>
+                                            </Frame>
+                                            <Label TextColor="#3F4946"
                                                        HorizontalTextAlignment="Center"
                                                        FontSize="Medium"
                                                        Text="{Binding GroupName}"/>
-                                    </StackLayout>
-                                </Frame>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -131,61 +133,67 @@
                     </Grid>
 
                 </StackLayout>
-            </Grid>
 
-            <CollectionView x:Name="CvAds"
+                    <CollectionView x:Name="CvAds"
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
                             SelectionMode="Single">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
                                      Span="1" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="6*" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
-                            <Frame CornerRadius="100"
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="6*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Frame CornerRadius="100"
                                        Padding="0"
                                        Grid.Row="0"
                                        Grid.Column="0"
                                        IsClippedToBounds="True"
                                        HorizontalOptions="Center">
-                                <Image x:Name="AutorAvatar" 
+                                        <Image x:Name="AutorAvatar" 
                                            Source="{Binding AuthorAvatar}" 
                                            HeightRequest="50"
                                            WidthRequest="50"/>
-                            </Frame>
-                            <Label Margin="15,0,0,0" Text="{Binding AuthorName}" FontSize="Small" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
-                            <StackLayout Grid.Column="1"
+                                    </Frame>
+                                    <Label Margin="15,0,0,0" Text="{Binding AuthorName}" FontSize="Small" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
+                                    <StackLayout Grid.Column="1"
                                              Grid.ColumnSpan="2"
                                              Grid.Row="0" Grid.RowSpan="3"
                                              VerticalOptions="StartAndExpand"
                                              HorizontalOptions="Start"
                                              Spacing="0"
                                              Margin="10,0,10,10">
-                                <Frame Padding="5"
+                                        <Frame Padding="5"
                                    VerticalOptions="Center"
                                    CornerRadius="15"
                                    BackgroundColor="#E4E4E4"
                                    Margin="5,0,5,0"
                                    HasShadow="True">
-                                    <Label Text="{Binding TextBody}"/>
-                                </Frame>
-                            </StackLayout>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                            <Label Text="{Binding TextBody}"/>
+                                        </Frame>
+                                    </StackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                <Grid x:Name="GridOverlay"
+                </Grid>
+
+            
+
+            <Grid x:Name="GridOverlay"
                   IsVisible="False"
                   ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
@@ -299,6 +307,7 @@
                         <TapGestureRecognizer x:Name="TapCloseMenu" Tapped="TapCloseMenu_Tapped" />
                     </BoxView.GestureRecognizers>
                 </BoxView>
+            </Grid>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

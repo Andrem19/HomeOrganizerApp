@@ -26,15 +26,18 @@ namespace HomeOrganizerApp.Pages
 
         private async void Send_Button(object sender, EventArgs e)
         {
-            AdDto ad = new AdDto();
-            ad.AuthorName = Preferences.Get("userName", string.Empty);
-            ad.TextBody = Editor_Name.Text;
-            ad.AuthorId = "none";
-            ad.AuthorAvatar = "none";
-            ad.IsVoting = false;
-            ad.GroupId = Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty));
-            await ApiService.PostAd(ad);
-            await Navigation.PopModalAsync();
+            if (!string.IsNullOrEmpty(Editor_Name.Text))
+            {
+                AdDto ad = new AdDto();
+                ad.AuthorName = Preferences.Get("userName", string.Empty);
+                ad.TextBody = Editor_Name.Text;
+                ad.AuthorId = "none";
+                ad.AuthorAvatar = "none";
+                ad.IsVoting = false;
+                ad.GroupId = Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty));
+                await ApiService.PostAd(ad);
+                await Navigation.PopModalAsync();
+            }
         }
     }
 }
