@@ -188,12 +188,15 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
+                    
                 </Grid>
-
-            
-
-            <Grid x:Name="GridOverlay"
+                <ActivityIndicator 
+                        Color="DarkGray"  
+                        x:Name="activity"
+                        HorizontalOptions="Center"
+                        VerticalOptions="End"
+                        BackgroundColor="Transparent"/>
+                <Grid x:Name="GridOverlay"
                   IsVisible="False"
                   ColumnSpacing="0">
                 <Grid.ColumnDefinitions>

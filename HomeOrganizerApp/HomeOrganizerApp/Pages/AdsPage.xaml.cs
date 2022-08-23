@@ -68,7 +68,7 @@ namespace HomeOrganizerApp.Pages
 
                 Group_Label.Text = $"{groups[index].GroupName} Group";
                 Preferences.Set("CurrentGroup", groups[index].Id.ToString());
-                currentCount = AllAds.Count > 10 ? 10 : AllAds.Count;
+                currentCount = AllAds.Count > 6 ? 6 : AllAds.Count;
                 
                 for (int i = 0; i < currentCount; i++)
                 {
@@ -88,19 +88,24 @@ namespace HomeOrganizerApp.Pages
             setUpAvatar();
             isPlusVisible();
 
-            CvAds.RemainingItemsThreshold = 3;
+            CvAds.RemainingItemsThreshold = 1;
             CvAds.RemainingItemsThresholdReached += CvAds_RemainingItemsThresholdReached;
         }
 
-        private void CvAds_RemainingItemsThresholdReached(object sender, EventArgs e)
+        private async void CvAds_RemainingItemsThresholdReached(object sender, EventArgs e)
         {
-            var count = AllAds.Count > (currentCount + 10) ? currentCount + 10 : AllAds.Count;
-            currentCount = count;
-            for (int i = 0; i < currentCount; i++)
+            if (activity.IsRunning) return;
+
+            activity.IsRunning = true;
+            await Task.Delay(2000);
+
+            var count = AllAds.Count > currentCount+3? currentCount+3: AllAds.Count;
+            for (int i = currentCount; i < count; i++)
             {
                 AdsCollection.Add(AllAds[i]);
             }
-            Task.Delay(2000);
+            currentCount = count;
+            activity.IsRunning = false;
         }
 
         public async void LoadMyGroups()
@@ -147,7 +152,7 @@ namespace HomeOrganizerApp.Pages
                 setUpAvatar();
                 isPlusVisible();
                 AdsCollection.Clear();
-                currentCount = AllAds.Count > 10 ? 10 : AllAds.Count;
+                currentCount = AllAds.Count > 6 ? 6 : AllAds.Count;
                 for (int i = 0; i < currentCount; i++)
                 {
                     AdsCollection.Add(AllAds[i]);
