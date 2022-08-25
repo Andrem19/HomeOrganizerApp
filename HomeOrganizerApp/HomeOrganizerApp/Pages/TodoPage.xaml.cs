@@ -23,10 +23,12 @@ namespace HomeOrganizerApp.Pages
         public ObservableCollection<GroupDto> GroupCollection;
         public ObservableCollection<PayloadDto> PayloadCollection;
         public ObservableCollection<TaskItemDto> TasksCollection;
-        public List<GroupDto> Groups { get; set; } = new List<GroupDto>();
-        public static int groupIndex { get; set; }
-        public static string CurrentPayload { get; set; }
-        public int currentCount { get; set; }
+        public static List<GroupDto> Groups { get; set; } = new List<GroupDto>();
+        public static int CurrentGroupIndex { get; set; }
+        public static string CurrentPayloadIndex { get; set; } = "0";
+        public static string CurrentPayloadId { get; set; } = null;
+        public static string CreateNewPayloadIndex { get; set; } = "0";
+        public static string CreateNewPayloadId { get; set; } = null;
         private MediaFile _mediaFile;
 
         public TodoPage()
@@ -67,7 +69,12 @@ namespace HomeOrganizerApp.Pages
 
         public void ChooseGroup(int index)
         {
-            groupIndex = index;
+            CurrentGroupIndex = index;
+            if (Groups[CurrentGroupIndex].Payloads.Count - 1 < Convert.ToInt32(CurrentPayloadIndex))
+            {
+                CurrentPayloadIndex = 0.ToString();
+                CurrentPayloadId = null;
+            }
             var groups = GroupCollection.ToList();
             if (groups.Count > 1)
             {
@@ -89,8 +96,6 @@ namespace HomeOrganizerApp.Pages
         {
             base.OnDisappearing();
             //Preferences.Set("PayloadId", string.Empty);
-            groupIndex = 0;
-            CurrentPayload = null;
             GroupCollection = new ObservableCollection<GroupDto>();
             PayloadCollection = new ObservableCollection<PayloadDto>();
             TasksCollection = new ObservableCollection<TaskItemDto>();
@@ -130,13 +135,18 @@ namespace HomeOrganizerApp.Pages
         }
         private async void CvGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             Preferences.Set("PayloadId", string.Empty);
             var currentSelection = e.CurrentSelection.FirstOrDefault() as GroupDto;
             
             if (currentSelection.Id != 0)
             {
-                groupIndex = Groups.IndexOf(currentSelection);
+                CurrentGroupIndex = Groups.IndexOf(currentSelection);
                 Preferences.Set("CurrentGroup", currentSelection.Id.ToString());
+
+                CurrentPayloadIndex = 0.ToString();
+                CurrentPayloadId = null;
+
                 setUpAvatar();
                 isPlusVisible();
                 LoadPayloads();
@@ -150,26 +160,29 @@ namespace HomeOrganizerApp.Pages
                 await Navigation.PushModalAsync(new CreateNewGroup());
             }
         }
-        public async void LoadPayloads()
-        {
-            //Payloads = await ApiPayloadsService.GetPayloadsByGroupId(Preferences.Get("CurrentGroup", string.Empty));
-            
-            if (Groups[groupIndex].Payloads != null && Groups[groupIndex].Payloads.Count > 0)
+        public void LoadPayloads()
+        {            
+            if (Groups[CurrentGroupIndex].Payloads != null && Groups[CurrentGroupIndex].Payloads.Count > 0)
             {
                 PayloadCollection.Clear();
-                foreach (var payload in Groups[groupIndex].Payloads)
+                foreach (var payload in Groups[CurrentGroupIndex].Payloads)
                 {
                     PayloadCollection.Add(payload);
                 }
                 CvPayloads.ItemsSource = PayloadCollection;
 
-
-                string payloadId = Preferences.Get("PayloadId", string.Empty);
-                int index = 0;
-                if (!string.IsNullOrEmpty(payloadId))
+                if (CreateNewPayloadId != null)
                 {
-                    List<PayloadDto> payList = PayloadCollection.ToList();
-                    index = payList.FindIndex(x => x.Id.ToString() == payloadId);
+                    CurrentPayloadId = CreateNewPayloadId;
+                    CurrentPayloadIndex = CreateNewPayloadIndex;
+                    CreateNewPayloadId = null;
+                    CreateNewPayloadIndex = "0";
+                }
+
+                int index = 0;
+                if (CurrentPayloadId != null)
+                {
+                    index = Convert.ToInt32(CurrentPayloadIndex);
                 }
                 LoadTasks(index);
                 CvPayloads.SelectedItem = PayloadCollection[index];
@@ -189,18 +202,21 @@ namespace HomeOrganizerApp.Pages
             {
                 TasksCollection.Clear();
             }
-            if (Groups[groupIndex].Payloads[index].Tasks != null)
+            if (Groups[CurrentGroupIndex].Payloads[index].Tasks != null)
             {
-                foreach (var task in Groups[groupIndex].Payloads[index].Tasks)
+                foreach (var task in Groups[CurrentGroupIndex].Payloads[index].Tasks)
                 {
+                    if (string.IsNullOrEmpty(task.Description))
+                    {
+                        task.IsDescription = false;
+                    }
+                    else task.IsDescription = true;
                     if (task.Complete)
                     {
                         task.Color = "#92E1AF";
                     }
-                    else
-                    {
-                        task.Color = "#F7D2DF";
-                    }
+                    else task.Color = "#F7D2DF";
+
                     TasksCollection.Add(task);
                 }
                 CvTodoList.ItemsSource = TasksCollection;
@@ -325,26 +341,44 @@ namespace HomeOrganizerApp.Pages
             }
         }
 
-        private void OnImageInfoTapped(object sender, EventArgs e)
+        private async void OnImageInfoTapped(object sender, EventArgs e)
         {
+            Image lblClicked = (Image)sender;
+            var item = (TapGestureRecognizer)lblClicked.GestureRecognizers[0];
+            var id = item.CommandParameter;
+            var TaskItem = Groups[CurrentGroupIndex].Payloads[Convert.ToInt32(CurrentPayloadIndex)].Tasks.FirstOrDefault(x => x.Id.ToString() == id.ToString());
 
+            await DisplayAlert(TaskItem.Title, TaskItem.Description, "Alright");
         }
 
-        private void OnImageRemoveTapped(object sender, EventArgs e)
+        private async void OnImageRemoveTapped(object sender, EventArgs e)
         {
+            Image lblClicked = (Image)sender;
+            var item = (TapGestureRecognizer)lblClicked.GestureRecognizers[0];
+            var id = item.CommandParameter;
 
+            bool res = await ApiPayloadsService.DeleteTask(Preferences.Get("CurrentGroup", string.Empty), Preferences.Get("PayloadId", string.Empty), id.ToString());
+            if (res)
+            {
+                var TaskItem = TasksCollection.FirstOrDefault(x => x.Id.ToString() == id.ToString());
+                TasksCollection.Remove(TaskItem);
+            }
         }
 
         private void CvPayloads_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var currentSelection = e.CurrentSelection.FirstOrDefault() as PayloadDto;
             Preferences.Set("PayloadId", currentSelection.Id.ToString());
-            int index = Groups[groupIndex].Payloads.IndexOf(currentSelection);
+            int index = Groups[CurrentGroupIndex].Payloads.IndexOf(currentSelection);
+            CurrentPayloadId = currentSelection.Id.ToString();
+            CurrentPayloadIndex = index.ToString();
             LoadTasks(index);
         }
 
         private void RefreshMyTasks(object sender, EventArgs e)
         {
+            CreateNewPayloadId = CurrentPayloadId;
+            CreateNewPayloadIndex = CurrentPayloadIndex;
             RefreshV.IsRefreshing = true;
             OnAppearing();
             RefreshV.IsRefreshing = false;
@@ -353,6 +387,11 @@ namespace HomeOrganizerApp.Pages
         private async void OnAddTaskTapped(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new AddNewTask());
+        }
+
+        private void OnResetTapped(object sender, EventArgs e)
+        {
+
         }
     }
 }

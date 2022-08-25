@@ -22,6 +22,8 @@ namespace HomeOrganizerApp.Pages
         {
             string id = await ApiPayloadsService.CreateNewPayload(Preferences.Get("CurrentGroup", string.Empty), NameOfList.Text);
             Preferences.Set("PayloadId", id);
+            TodoPage.CreateNewPayloadId = id;
+            TodoPage.CreateNewPayloadIndex = TodoPage.Groups[TodoPage.CurrentGroupIndex].Payloads.Count.ToString();
             await Navigation.PopModalAsync();
         }
 

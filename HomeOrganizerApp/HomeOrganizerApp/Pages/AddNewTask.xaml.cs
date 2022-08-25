@@ -36,6 +36,8 @@ namespace HomeOrganizerApp.Pages
             TaskToCreate.Type = (TYPE)picker.SelectedIndex;
             TaskToCreate.GroupId = Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty));
             TaskToCreate.PayloadId = Convert.ToInt32(Preferences.Get("PayloadId", string.Empty));
+            TodoPage.CreateNewPayloadId = TodoPage.CurrentPayloadId;
+            TodoPage.CreateNewPayloadIndex = TodoPage.CurrentPayloadIndex;
 
             bool res = await ApiPayloadsService.CreateNewTask(TaskToCreate);
             if (res)

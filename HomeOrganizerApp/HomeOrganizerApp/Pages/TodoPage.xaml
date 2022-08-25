@@ -16,7 +16,7 @@
                         <RowDefinition Height="145" />
                         <RowDefinition Height="45" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="45" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
@@ -225,20 +225,20 @@
                                                 <CheckBox Margin="5,0,0,0" IsChecked="{Binding Complete}" CheckedChanged="TaskCheckBoxChanged" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" x:Name="TaskCheckBox" />
                                                 <Label VerticalOptions="Center" FontSize="Medium" Grid.Row="0" Grid.Column="1" Text="{Binding Title}" />
                                                 <Label VerticalOptions="Center" FontSize="Micro" Grid.Row="1" Grid.Column="1" Text="{Binding NameWhoCompletLast}" />
-                                                <Image HeightRequest="20" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Source="information.png">
+                                                <Image IsVisible="{Binding IsDescription}" HeightRequest="20" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Source="information.png">
                                                     <Image.GestureRecognizers>
                                                         <TapGestureRecognizer
-                                        CommandParameter="{Binding Id}"
-                                        Tapped="OnImageInfoTapped"
-                                        NumberOfTapsRequired="1" />
+                                                            CommandParameter="{Binding Id}"
+                                                            Tapped="OnImageInfoTapped"
+                                                            NumberOfTapsRequired="1" />
                                                     </Image.GestureRecognizers>
                                                 </Image>
                                                 <Image HeightRequest="20" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center" Source="remove.png">
                                                     <Image.GestureRecognizers>
                                                         <TapGestureRecognizer
-                                        CommandParameter="{Binding Id}"
-                                        Tapped="OnImageRemoveTapped"
-                                        NumberOfTapsRequired="1" />
+                                                            CommandParameter="{Binding Id}"
+                                                            Tapped="OnImageRemoveTapped"
+                                                            NumberOfTapsRequired="1" />
                                                     </Image.GestureRecognizers>
                                                 </Image>
                                             </Grid>
@@ -247,14 +247,41 @@
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </RefreshView>
-                        <Label x:Name="AddTask_Name" HorizontalOptions="Center" VerticalOptions="Start" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Text="Add New Task">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer
+                        
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+                            <Button HeightRequest="40" x:Name="ListSettings_Name" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Small" TextColor="Blue" FontAttributes="Bold" Text="List Settings">
+                                <Button.GestureRecognizers>
+                                    <TapGestureRecognizer
                                         CommandParameter="{Binding Id}"
                                         Tapped="OnAddTaskTapped"
                                         NumberOfTapsRequired="1" />
-                            </Label.GestureRecognizers>
-                        </Label>
+                                </Button.GestureRecognizers>
+                            </Button>
+                            <Button HeightRequest="40" x:Name="AllReset_Name" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Small" TextColor="White" FontAttributes="Bold" Text="Reset">
+                                <Button.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        CommandParameter="{Binding Id}"
+                                        Tapped="OnResetTapped"
+                                        NumberOfTapsRequired="1" />
+                                </Button.GestureRecognizers>
+                            </Button>
+                            <Button HeightRequest="40" x:Name="AddTask_Name" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End" FontSize="Medium" TextColor="Green" FontAttributes="Bold" Text="+Add Task">
+                                <Button.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        CommandParameter="{Binding Id}"
+                                        Tapped="OnAddTaskTapped"
+                                        NumberOfTapsRequired="1" />
+                                </Button.GestureRecognizers>
+                            </Button>
+                        </Grid>
                     </StackLayout>
                 </Grid>
                 

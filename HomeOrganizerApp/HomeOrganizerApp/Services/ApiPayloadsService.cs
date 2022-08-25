@@ -64,5 +64,14 @@ namespace HomeOrganizerApp.Services
             if (!response.IsSuccessStatusCode) return false;
             return true;
         }
+        public static async Task<bool> DeleteTask(string groupId, string payloadId, string taskId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.DeleteAsync(AppSettings.ApiUrl + "api/Payload/task?TaskId=" + taskId + "&PayloadId=" + payloadId + "&GroupId=" + groupId);
+            if (!response.IsSuccessStatusCode) return false;
+            return true;
+        }
     }
 }
