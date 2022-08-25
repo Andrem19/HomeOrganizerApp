@@ -45,5 +45,24 @@ namespace HomeOrganizerApp.Services
             var result = JsonConvert.DeserializeObject<List<TaskItemDto>>(resp);
             return result;
         }
+        public static async Task<string> CreateNewPayload(string groupId, string Name)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Payload/create?GroupId=" + groupId + "&Name=" + Name);
+            return response;
+        }
+        public static async Task<bool> CreateNewTask(TaskItemDto NewTask)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            var json = JsonConvert.SerializeObject(NewTask);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.PostAsync(AppSettings.ApiUrl + "api/Payload", content);
+            if (!response.IsSuccessStatusCode) return false;
+            return true;
+        }
     }
 }

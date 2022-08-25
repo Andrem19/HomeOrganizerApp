@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -26,8 +27,8 @@ namespace HomeOrganizerApp.Pages
         public static int groupIndex { get; set; }
         public static string CurrentPayload { get; set; }
         public int currentCount { get; set; }
-        public static int lastTaskChangeId { get; set; }
         private MediaFile _mediaFile;
+
         public TodoPage()
         {
             InitializeComponent();
@@ -41,10 +42,12 @@ namespace HomeOrganizerApp.Pages
                 await ApiService.MyRoleInTheGroup(currentGroup);
                 role = Preferences.Get("MyRole", string.Empty);
             }
+            AddTask_Name.IsVisible = false;
             plus_ads.IsVisible = false;
             if (role == "CREATOR" || role == "MODERATOR")
             {
                 plus_ads.IsVisible = true;
+                AddTask_Name.IsVisible = true;
             }
         }
         public async void setUpAvatar()
@@ -73,7 +76,6 @@ namespace HomeOrganizerApp.Pages
                 CvGroups.SelectedItem = GroupCollection[index];
             }
         }
-
         protected override void OnAppearing()
         {
             GroupCollection = new ObservableCollection<GroupDto>();
@@ -83,6 +85,18 @@ namespace HomeOrganizerApp.Pages
 
             base.OnAppearing();
         }
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            //Preferences.Set("PayloadId", string.Empty);
+            groupIndex = 0;
+            CurrentPayload = null;
+            GroupCollection = new ObservableCollection<GroupDto>();
+            PayloadCollection = new ObservableCollection<PayloadDto>();
+            TasksCollection = new ObservableCollection<TaskItemDto>();
+            CvTodoList.ItemsSource = TasksCollection;
+        }
+
         public async void LoadMyGroups()
         {
             Groups = await ApiService.GetMyGroupsWithPayloads();
@@ -221,11 +235,6 @@ namespace HomeOrganizerApp.Pages
             await SlMenu.TranslateTo(0, 0, 400, Easing.Linear);
         }
 
-        private void TodoTask_Change(object sender, CheckedChangedEventArgs e)
-        {
-
-        }
-
         private async void OnImageAvatarTapped(object sender, EventArgs e)
         {
             await CrossMedia.Current.Initialize();
@@ -313,7 +322,6 @@ namespace HomeOrganizerApp.Pages
                     item.Color = "#F7D2DF";
                 }
                 TasksCollection[index] = item;
-                //CvTodoList.ItemsSource = TasksCollection;
             }
         }
 
@@ -333,6 +341,18 @@ namespace HomeOrganizerApp.Pages
             Preferences.Set("PayloadId", currentSelection.Id.ToString());
             int index = Groups[groupIndex].Payloads.IndexOf(currentSelection);
             LoadTasks(index);
+        }
+
+        private void RefreshMyTasks(object sender, EventArgs e)
+        {
+            RefreshV.IsRefreshing = true;
+            OnAppearing();
+            RefreshV.IsRefreshing = false;
+        }
+
+        private async void OnAddTaskTapped(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new AddNewTask());
         }
     }
 }

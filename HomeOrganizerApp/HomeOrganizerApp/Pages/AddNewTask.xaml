@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HomeOrganizerApp.Pages.AddNewPayload">
+             x:Class="HomeOrganizerApp.Pages.AddNewTask">
     <ContentPage.Content>
         <StackLayout>
             <Grid Margin="20">
@@ -19,16 +19,24 @@
                 </Image>
                 <Label Grid.Column="1"
                        TextColor="#3F4946"
-                       Text="Create New ToDo List"
+                       Text="Create New Task"
                        FontSize="Medium"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center" />
-
             </Grid>
             <StackLayout>
-                <Label Margin="15, 0, 15, 0" Text="List Name" />
-                <Entry x:Name="NameOfList" Margin="15, 0, 55, 0"/>
-                <Button Clicked="Create_Button" BackgroundColor="#3F4946" CornerRadius="15" Margin="0, 5, 15, 5" Text="Create" HorizontalOptions="Center" />
+                <Entry Placeholder="Title" x:Name="Title_Name" Margin="15, 0, 200, 0"/>
+                <Picker x:Name="picker" Margin="15, 0, 200, 0">
+                    <Picker.Items>
+                        <x:String>EVERYDAY</x:String>
+                        <x:String>ALLWAYS</x:String>
+                        <x:String>ONCE</x:String>
+                    </Picker.Items>
+                </Picker>
+                    <Frame Margin="15, 0, 15, 0" CornerRadius="15" Padding="0" IsClippedToBounds="True">
+                    <Editor x:Name="Description_Name" TextColor="White" BackgroundColor="#3F4946" HeightRequest="75" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                </Frame>
+                <Button Clicked="Send_Button" BackgroundColor="#3F4946" CornerRadius="15" Margin="0, 5, 15, 5" Text="Send" HorizontalOptions="End" Grid.Column="2" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

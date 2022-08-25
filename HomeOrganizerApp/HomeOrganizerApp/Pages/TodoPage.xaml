@@ -16,6 +16,7 @@
                         <RowDefinition Height="145" />
                         <RowDefinition Height="45" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
@@ -121,19 +122,21 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Margin="0, 2, 0, 2" Grid.Column="1" HorizontalOptions="CenterAndExpand" FontSize="Large" FontAttributes="Bold" x:Name="Group_Label" />
-                            <Image x:Name="plus_ads" Margin="10, 5, 10, 5" WidthRequest="30" HeightRequest="30" Source="plus.png" Grid.Column="2">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Tapped="OnPlusTapped"
-                                        NumberOfTapsRequired="1" />
-                                </Image.GestureRecognizers>
-                            </Image>
+
                         </Grid>
                     </StackLayout>
-
-                    <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
-                        <CollectionView  x:Name="CvPayloads"
-                                 Margin="0, 7, 0, 0"
+                    <StackLayout Grid.Row="3" Grid.Column="2">
+                        <Image x:Name="plus_ads" Margin="10, 5, 10, 5" WidthRequest="30" HeightRequest="30" Source="plus.png">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                        Tapped="OnPlusTapped"
+                                        NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                    <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                        <CollectionView x:Name="CvPayloads"
+                                 Margin="3, 7, 3, 0"
                                  SelectionMode="Single"
                                  SelectionChanged="CvPayloads_SelectionChanged"
                                  BindingContext="{Binding Id}"
@@ -176,79 +179,86 @@
                         </CollectionView>
                     </StackLayout>
 
-                    <CollectionView x:Name="CvTodoList"
-                                    Grid.Row="4"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="3"
+                    <StackLayout Grid.Row="4"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3">
+                        <RefreshView x:Name="RefreshV" Refreshing="RefreshMyTasks">
+                            <CollectionView x:Name="CvTodoList"
+                                    Margin="3,3,3,3"
                             SelectionMode="Single">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical"
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout Orientation="Vertical"
                                      Span="1" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout>
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout>
 
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters >
-                                                    <Setter Property="BackgroundColor" Value="{Binding Color}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Selected">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="{Binding Color}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
 
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
+                                                    <VisualState x:Name="Normal">
+                                                        <VisualState.Setters >
+                                                            <Setter Property="BackgroundColor" Value="{Binding Color}" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Selected">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="BackgroundColor" Value="{Binding Color}" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
 
-                                    <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="5*" />
-                                        <ColumnDefinition Width="2*" />
-                                        <ColumnDefinition Width="2*" />
-                                    </Grid.ColumnDefinitions>
-                                    <CheckBox Margin="5,0,0,0" IsChecked="{Binding Complete}" CheckedChanged="TaskCheckBoxChanged" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" x:Name="TaskCheckBox" />
-                                    <Label VerticalOptions="Center" FontSize="Medium" Grid.Row="0" Grid.Column="1" Text="{Binding Title}" />
-                                    <Label VerticalOptions="Center" FontSize="Micro" Grid.Row="1" Grid.Column="1" Text="Who complete last" />
-                                    <Image HeightRequest="20" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" VerticalOptions="Center" Source="information.png">
-                                        <Image.GestureRecognizers>
-                                            <TapGestureRecognizer
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="1*" />
+                                                    <ColumnDefinition Width="5*" />
+                                                    <ColumnDefinition Width="2*" />
+                                                    <ColumnDefinition Width="2*" />
+                                                </Grid.ColumnDefinitions>
+                                                <CheckBox Margin="5,0,0,0" IsChecked="{Binding Complete}" CheckedChanged="TaskCheckBoxChanged" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" x:Name="TaskCheckBox" />
+                                                <Label VerticalOptions="Center" FontSize="Medium" Grid.Row="0" Grid.Column="1" Text="{Binding Title}" />
+                                                <Label VerticalOptions="Center" FontSize="Micro" Grid.Row="1" Grid.Column="1" Text="{Binding NameWhoCompletLast}" />
+                                                <Image HeightRequest="20" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" Source="information.png">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer
                                         CommandParameter="{Binding Id}"
                                         Tapped="OnImageInfoTapped"
                                         NumberOfTapsRequired="1" />
-                                        </Image.GestureRecognizers>
-                                    </Image>
-                                    <Image HeightRequest="20" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" VerticalOptions="Center" Source="remove.png">
-                                        <Image.GestureRecognizers>
-                                            <TapGestureRecognizer
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Image HeightRequest="20" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center" Source="remove.png">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer
                                         CommandParameter="{Binding Id}"
                                         Tapped="OnImageRemoveTapped"
                                         NumberOfTapsRequired="1" />
-                                        </Image.GestureRecognizers>
-                                    </Image>
-                                </Grid>
-                               </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </Grid>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </RefreshView>
+                        <Label x:Name="AddTask_Name" HorizontalOptions="Center" VerticalOptions="Start" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Text="Add New Task">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                        CommandParameter="{Binding Id}"
+                                        Tapped="OnAddTaskTapped"
+                                        NumberOfTapsRequired="1" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
                 </Grid>
-                <ActivityIndicator 
-                        Color="DarkGray"  
-                        x:Name="activity"
-                        HorizontalOptions="Center"
-                        VerticalOptions="End"
-                        BackgroundColor="Transparent"/>
+                
+                
                 <Grid x:Name="GridOverlay"
                   IsVisible="False"
                   ColumnSpacing="0">
