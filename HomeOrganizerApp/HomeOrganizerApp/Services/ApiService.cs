@@ -66,11 +66,7 @@ namespace HomeOrganizerApp.Services
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
             var response = await httpClient.GetStringAsync(AppSettings.ApiUrl + "api/Account/Avatar?groupId=" + groupId);
-            if (!string.IsNullOrEmpty(response))
-            {
-                return response;
-            }
-            return null;
+            return response;
         }
         public static async Task<string> CreateGroup(string name)
         {
@@ -88,6 +84,16 @@ namespace HomeOrganizerApp.Services
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
             var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Group");
+            var resp = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<GroupDto>>(resp);
+            return result;
+        }
+        public static async Task<List<GroupDto>> GetMyGroupsWithPayloads()
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Group/payloads");
             var resp = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<GroupDto>>(resp);
             return result;

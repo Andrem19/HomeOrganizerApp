@@ -181,4 +181,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\settinguser.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\information.png" />
+  </ItemGroup>
 </Project>

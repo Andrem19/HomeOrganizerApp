@@ -7,6 +7,8 @@
         public string Description { get; set; }
         public TYPE Type { get; set; }
         public bool Complete { get; set; }
+        public string NameWhoCompletLast { get; set; }
+        public string Color { get; set; }
         public int PayloadId { get; set; }
         public int GroupId { get; set; }
     }
@@ -14,7 +16,6 @@
     {
         EVERYDAY,
         ALLWAYS,
-        ONCE,
-        TWICE,
+        ONCE
     }
 }

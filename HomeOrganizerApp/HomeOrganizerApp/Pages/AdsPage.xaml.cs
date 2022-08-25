@@ -174,6 +174,7 @@ namespace HomeOrganizerApp.Pages
             Preferences.Set("accessToken", string.Empty);
             Preferences.Set("tokenExpirationTime", 0);
             Preferences.Set("CurrentGroup", string.Empty);
+            Preferences.Set("PayloadId", string.Empty);
             Preferences.Set("InviteCode", string.Empty);
             Preferences.Set("Email", string.Empty);
             Preferences.Set("userName", string.Empty);
