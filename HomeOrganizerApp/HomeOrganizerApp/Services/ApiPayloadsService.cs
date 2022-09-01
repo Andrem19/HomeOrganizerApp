@@ -73,5 +73,23 @@ namespace HomeOrganizerApp.Services
             if (!response.IsSuccessStatusCode) return false;
             return true;
         }
+        public static async Task<bool> ResetPayload(string groupId, string payloadId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.GetAsync(AppSettings.ApiUrl + "api/Payload/reset?GroupId=" + groupId + "&PayloadId=" + payloadId);
+            if (!response.IsSuccessStatusCode) return false;
+            return true;
+        }
+        public static async Task<bool> DeletePayload(string groupId, string payloadId)
+        {
+            string token = Preferences.Get("accessToken", string.Empty);
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            var response = await httpClient.DeleteAsync(AppSettings.ApiUrl + "api/Payload/payload?GroupId=" + groupId + "&PayloadId=" + payloadId);
+            if (!response.IsSuccessStatusCode) return false;
+            return true;
+        }
     }
 }

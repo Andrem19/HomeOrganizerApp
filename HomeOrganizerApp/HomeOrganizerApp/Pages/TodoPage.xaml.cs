@@ -46,10 +46,17 @@ namespace HomeOrganizerApp.Pages
             }
             AddTask_Name.IsVisible = false;
             plus_ads.IsVisible = false;
+            AllReset_Name.IsVisible = false;
+            ListSettings_Name.IsVisible = false;
             if (role == "CREATOR" || role == "MODERATOR")
             {
                 plus_ads.IsVisible = true;
                 AddTask_Name.IsVisible = true;
+                AllReset_Name.IsVisible = true;
+                if (role == "CREATOR")
+                {
+                    ListSettings_Name.IsVisible = true;
+                }
             }
         }
         public async void setUpAvatar()
@@ -138,7 +145,9 @@ namespace HomeOrganizerApp.Pages
             
             Preferences.Set("PayloadId", string.Empty);
             var currentSelection = e.CurrentSelection.FirstOrDefault() as GroupDto;
-            
+            Group_Label.Text = $"{currentSelection.GroupName} Group";
+            Group_Label.FontSize = currentSelection.GroupName.Length > 7 ? 16 : 22;
+
             if (currentSelection.Id != 0)
             {
                 CurrentGroupIndex = Groups.IndexOf(currentSelection);
@@ -389,9 +398,30 @@ namespace HomeOrganizerApp.Pages
             await Navigation.PushModalAsync(new AddNewTask());
         }
 
-        private void OnResetTapped(object sender, EventArgs e)
+        private async void OnResetTapped(object sender, EventArgs e)
         {
+            bool res = await DisplayAlert("", "Do you want to reset?", "Yes", "No");
+            if (res)
+            {
+                bool trig = await ApiPayloadsService.ResetPayload(Preferences.Get("CurrentGroup", string.Empty), CurrentPayloadId);
+                if (trig)
+                {
+                    var tasks = Groups[CurrentGroupIndex].Payloads[Convert.ToInt32(CurrentPayloadIndex)].Tasks;
 
+                    for (int i = 0; i < TasksCollection.Count; i++)
+                    {
+                        tasks[i].Complete = false;
+                        tasks[i].Color = "#F7D2DF";
+                        tasks[i].NameWhoCompletLast = "";
+                        TasksCollection[i] = tasks[i];
+                    }
+                }
+            }
+        }
+
+        private async void ListSettingsButton(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new ListSettings());
         }
     }
 }

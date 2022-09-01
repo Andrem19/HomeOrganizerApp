@@ -257,29 +257,11 @@
                                 <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
-                            <Button HeightRequest="40" x:Name="ListSettings_Name" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Small" TextColor="Blue" FontAttributes="Bold" Text="List Settings">
-                                <Button.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        CommandParameter="{Binding Id}"
-                                        Tapped="OnAddTaskTapped"
-                                        NumberOfTapsRequired="1" />
-                                </Button.GestureRecognizers>
+                            <Button Clicked="ListSettingsButton" HeightRequest="40" x:Name="ListSettings_Name" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Small" TextColor="Blue" FontAttributes="Bold" Text="List Settings">
                             </Button>
-                            <Button HeightRequest="40" x:Name="AllReset_Name" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Small" TextColor="White" FontAttributes="Bold" Text="Reset">
-                                <Button.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        CommandParameter="{Binding Id}"
-                                        Tapped="OnResetTapped"
-                                        NumberOfTapsRequired="1" />
-                                </Button.GestureRecognizers>
+                            <Button Clicked="OnResetTapped" HeightRequest="40" x:Name="AllReset_Name" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Small" TextColor="White" FontAttributes="Bold" Text="Reset">
                             </Button>
-                            <Button HeightRequest="40" x:Name="AddTask_Name" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End" FontSize="Medium" TextColor="Green" FontAttributes="Bold" Text="+Add Task">
-                                <Button.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        CommandParameter="{Binding Id}"
-                                        Tapped="OnAddTaskTapped"
-                                        NumberOfTapsRequired="1" />
-                                </Button.GestureRecognizers>
+                            <Button Clicked="OnAddTaskTapped" HeightRequest="40" x:Name="AddTask_Name" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End" FontSize="Medium" TextColor="Green" FontAttributes="Bold" Text="+Add Task">
                             </Button>
                         </Grid>
                     </StackLayout>

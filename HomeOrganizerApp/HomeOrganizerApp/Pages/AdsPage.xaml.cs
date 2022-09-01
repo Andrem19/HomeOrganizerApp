@@ -141,12 +141,12 @@ namespace HomeOrganizerApp.Pages
 
         private async void CvGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             var currentSelection = e.CurrentSelection.FirstOrDefault() as GroupDto;
             if (currentSelection.Id != 0)
             {
                 AllAds = await ApiService.GetAdsByGroupId(currentSelection.Id);
                 AllAds.Reverse();
+                Group_Label.FontSize = currentSelection.GroupName.Length > 7 ? 16 : 22;
                 Group_Label.Text = $"{currentSelection.GroupName} Group";
                 Preferences.Set("CurrentGroup", currentSelection.Id.ToString());
                 setUpAvatar();
@@ -163,8 +163,11 @@ namespace HomeOrganizerApp.Pages
             else if (currentSelection.Id == 0)
             {
                 List<GroupDto> grp = GroupCollection.ToList();
-                int index = grp.FindIndex(x => x.Id == Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty)));
-                CvGroups.SelectedItem = GroupCollection[index];
+                if (!string.IsNullOrEmpty(Preferences.Get("CurrentGroup", string.Empty)))
+                {
+                    int index = grp.FindIndex(x => x.Id == Convert.ToInt32(Preferences.Get("CurrentGroup", string.Empty)));
+                    CvGroups.SelectedItem = GroupCollection[index];
+                }
                 await Navigation.PushModalAsync(new CreateNewGroup());
             }
         }
